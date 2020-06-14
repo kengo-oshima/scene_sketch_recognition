@@ -4,6 +4,7 @@ from keras.utils import np_utils
 from keras.preprocessing.image import ImageDataGenerator
 import pandas as pd
 import matplotlib.pyplot as plt
+from pprint import pprint
 
 # ---------------------
 # データ読み込み・拡張
@@ -11,18 +12,26 @@ import matplotlib.pyplot as plt
 class GenData():
     def __init__(self, pd_obj):
         self.pd_obj = pd_obj
+        self.x = []
+        self.y = []
+        self.train_x = []
+        self.train_y = []
+        self.test_x = []
+        self.test_y = []
 
     def load_npdata(self, data_dir_path):
         file_list = os.listdir(data_dir_path)
-        data_list = []
+        self.x = []
         for category_index, file in enumerate(file_list):
             array = np.load(os.path.join(data_dir_path, file))
             for data in array:
-                data_list.append(data)
+                self.x.append(data)
 
-        return data_list
+    def load_label(self):
+        self.y = list(self.pd_obj['category'].values)
 
-
+    def data_split(self, cv_num, cv_count):
+        pass
 
 
 
@@ -35,5 +44,6 @@ if __name__ == '__main__':
     df = pd.read_csv(csv_file_path)
     data = GenData(df)
     img_data = data.load_npdata(img_dir_path)
+    label = list(data.load_label())
 
-    print(df)
+    pprint(label)
